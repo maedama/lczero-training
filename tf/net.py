@@ -530,7 +530,7 @@ class Net:
             if 'stddev' in tf_name:
                 w = np.sqrt(w + 1e-5)
 
-            tensors[tf_name] = w
+            tensors[tf_name] = w    
         return tensors
 
     def get_weights(self):

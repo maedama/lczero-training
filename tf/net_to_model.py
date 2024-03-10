@@ -3,6 +3,7 @@ import argparse
 import os
 import yaml
 import tfprocess
+import tensorflow as tf
 
 argparser = argparse.ArgumentParser(description='Convert net to model.')
 argparser.add_argument('net',
@@ -19,6 +20,11 @@ argparser.add_argument('-e',
                        '--ignore-errors',
                        action='store_true',
                        help='Ignore missing and wrong sized values.')
+
+argparser.add_argument('-o','--output',
+                       type=str,
+                       help='Ignore missing and wrong sized values.')
+
 args = argparser.parse_args()
 cfg = yaml.safe_load(args.cfg.read())
 print(yaml.dump(cfg, default_flow_style=False))
@@ -26,11 +32,8 @@ START_FROM = args.start
 
 tfp = tfprocess.TFProcess(cfg)
 tfp.init_net()
-tfp.replace_weights(args.net, args.ignore_errors)
+tfp.model(tf.zeros((2, 112, 8, 8)))
+tfp.replace_weights(args.net, ignore_errors=True)
 tfp.global_step.assign(START_FROM)
 
-root_dir = os.path.join(cfg['training']['path'], cfg['name'])
-if not os.path.exists(root_dir):
-    os.makedirs(root_dir)
-tfp.manager.save(checkpoint_number=START_FROM)
-print("Wrote model to {}".format(tfp.manager.latest_checkpoint))
+tfp.model.save(args.output)

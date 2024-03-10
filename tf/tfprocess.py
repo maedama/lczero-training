@@ -378,7 +378,7 @@ class TFProcess:
             self.init_net()
 
     def init_net(self):
-        self.l2reg = tf.keras.regularizers.l2(l=0.5 * (0.0001))
+        self.l2reg = tf.keras.regularizers.l2(l2=0.5 * (0.0001))
         input_var = tf.keras.Input(shape=(112, 8, 8))
         outputs = self.construct_net(input_var)
         self.model = tf.keras.Model(inputs=input_var, outputs=outputs)
@@ -634,7 +634,7 @@ class TFProcess:
         filters, blocks = self.net.filters(), self.net.blocks()
         if not ignore_errors:
             if self.RESIDUAL_FILTERS != filters:
-                raise ValueError("Number of filters doesn't match the network")
+                raise ValueError(f"Number of filters doesn't match the network {self.RESIDUAL_FILTERS}, {filters}")
             if self.RESIDUAL_BLOCKS != blocks:
                 raise ValueError("Number of blocks doesn't match the network")
             if self.POLICY_HEAD != self.net.pb.format.network_format.policy:
@@ -1350,9 +1350,9 @@ class TFProcess:
         if self.encoder_layers > 0:
             # DeepNorm
             alpha = tf.cast(tf.math.pow(2. * self.encoder_layers, 0.25),
-                            self.model_dtype)
+                            self.model_dtype).numpy()
             beta = tf.cast(tf.math.pow(8. * self.encoder_layers, -0.25),
-                           self.model_dtype)
+                           self.model_dtype).numpy()
             xavier_norm = tf.keras.initializers.VarianceScaling(
                 scale=beta, mode='fan_avg', distribution='truncated_normal')
             initializer = xavier_norm

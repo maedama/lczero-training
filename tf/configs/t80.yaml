@@ -1,0 +1,76 @@
+dataset:
+  allow_less_chunks: true
+  input_test:
+  - dev1/test/
+  input_train:
+  - dev1/train/
+  input_validation: dev1/validate/
+  num_chunks: 3000000
+  test_workers: 8
+  train_ratio: 0.9
+  train_workers: 32
+gpu: 0
+model:
+  arc_encoding: true
+  default_activation: mish
+  dropout_rate: 0.0
+  embedding_size: 768
+  encoder_d_model: 768
+  encoder_dff: 1024
+  encoder_heads: 24
+  encoder_layers: 15
+  glu: false
+  input_type: classic
+  moves_left: v1
+  moves_left_embedding_size: 8
+  policy: attention
+  policy_d_model: 768
+  policy_embedding_size: 768
+  smolgen_activation: swish
+  smolgen_gen_sz: 256
+  smolgen_hidden_channels: 32
+  smolgen_hidden_sz: 256
+  square_relu_ffn: false
+  talking_heads: false
+  use_smolgen: true
+  value: wdl
+  value_embedding_size: 32
+name: 768x15x24h-t80
+training:
+  batch_size: 2048
+  checkpoint_steps: 4000
+  diff_focus_min: 0.025
+  diff_focus_slope: 3.0
+  lookahead_optimizer: false
+  lr_boundaries:
+  - 100
+  lr_values:
+  - 5.0e-05
+  - 5.0e-05
+  mask_legal_moves: true
+  max_grad_norm: 3.0
+  moves_left_loss_weight: 1.0
+  new_optimizer: true
+  num_batch_splits: 4
+  num_test_positions: 40000
+  path: dev1/networks
+  policy_loss_weight: 1.0
+  q_ratio: 0.0
+  reg_term_weight: 1.0
+  renorm: true
+  renorm_max_d: 0.0
+  renorm_max_r: 1.0
+  reset_opt: false
+  shuffle_size: 500000
+  swa: true
+  swa_max_n: 10
+  swa_output: true
+  swa_steps: 100
+  test_steps: 250
+  total_steps: 250
+  train_avg_report_steps: 100
+  validation_steps: 250
+  value_loss_weight: 1.0
+  warmup_offset: 6692000
+  warmup_steps: 1000
+  weight_decay: 0.0
